@@ -1,0 +1,27 @@
+{
+  "entities": {
+    "cms": {
+      "type": "document",
+      "properties": {}
+    },
+    "images": {
+      "type": "document",
+      "properties": {
+        "data": { "type": "string" },
+        "mimeType": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "rules": {
+      "cms": {
+        "read": "true",
+        "write": "true"
+      },
+      "images": {
+        "read": "true",
+        "write": "true"
+      }
+    }
+  }
+}

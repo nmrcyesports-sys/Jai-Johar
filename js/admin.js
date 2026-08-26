@@ -313,7 +313,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = await res.json();
       
       for (const [key, value] of Object.entries(data)) {
-        const isImage = (typeof value === 'string' && value.startsWith('assets/images/'));
+        const isImage = (typeof value === 'string' && (value.startsWith('assets/images/') || value.startsWith('/api/images/')));
         const wrapper = document.createElement("div");
         wrapper.style.display = "flex";
         wrapper.style.flexDirection = "column";

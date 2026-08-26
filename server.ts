@@ -4,50 +4,67 @@ import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import multer from "multer";
 
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, doc, getDoc, setDoc } from 'firebase/firestore';
+
 const app = express();
 const PORT = 3000;
-
 app.use(express.json());
 
-const CONTENT_FILE = path.join(process.cwd(), "content.json");
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const dir = path.join(process.cwd(), "assets", "images");
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname) || ".jpg";
-    cb(null, "img_" + uniqueSuffix + ext);
-  }
-});
-const upload = multer({ storage: storage });
-
-
-const MENU_FILE = path.join(process.cwd(), "menu.json");
-if (!fs.existsSync(MENU_FILE)) {
-  const defaultMenu = [
-    { id: "1", name: "Traditional Jharkhand Thali", description: "A wholesome meal with rice, dal, chilka roti, rugda curry, and chutneys.", price: "₹350", category: "Thalis", image: "assets/images/img_3ce900d769.jpg" },
-    { id: "2", name: "Dhuska & Mutton Curry", description: "Deep-fried rice batter served with spicy country-style mutton.", price: "₹450", category: "Mains", image: "assets/images/img_5e67f940cf.jpg" },
-    { id: "3", name: "Handia (Rice Beer) - Mocktail", description: "A refreshing non-alcoholic take on the traditional tribal drink.", price: "₹120", category: "Beverages", image: "assets/images/img_25e3ed6ea2.jpg" },
-    { id: "4", name: "Pitha Platter", description: "Assorted sweet and savory steamed rice cakes.", price: "₹200", category: "Desserts", image: "assets/images/img_3bff88f72e.jpg" }
-  ];
-  fs.writeFileSync(MENU_FILE, JSON.stringify(defaultMenu, null, 2), "utf-8");
+// Initialize Firebase Client SDK
+let db: any = null;
+try {
+  const fbConfig = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'firebase-applet-config.json'), 'utf8'));
+  const fbApp = initializeApp({
+    projectId: fbConfig.projectId,
+    appId: fbConfig.appId,
+    apiKey: fbConfig.apiKey,
+    authDomain: fbConfig.authDomain,
+  });
+  db = getFirestore(fbApp, fbConfig.firestoreDatabaseId || "(default)");
+  console.log("Firebase Client initialized successfully");
+} catch(err) {
+  console.error("Failed to initialize Firebase", err);
 }
 
-app.get("/api/menu", (req, res) => {
+const CONTENT_FILE = path.join(process.cwd(), "content.json");
+const MENU_FILE = path.join(process.cwd(), "menu.json");
+
+// Store uploads in memory instead of disk
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+app.get("/api/menu", async (req, res) => {
   try {
-    if (!fs.existsSync(MENU_FILE)) return res.json([]);
-    res.json(JSON.parse(fs.readFileSync(MENU_FILE, "utf-8")));
+    if (db) {
+      const d = doc(db, "cms", "menu");
+      const snap = await getDoc(d);
+      if (!snap.exists()) {
+        let localMenu = [];
+        if (fs.existsSync(MENU_FILE)) {
+          localMenu = JSON.parse(fs.readFileSync(MENU_FILE, "utf-8"));
+        }
+        if (localMenu.length > 0) {
+           await setDoc(d, { items: localMenu });
+        }
+        return res.json(localMenu);
+      }
+      return res.json(snap.data()?.items || []);
+    } else {
+      if (!fs.existsSync(MENU_FILE)) return res.json([]);
+      res.json(JSON.parse(fs.readFileSync(MENU_FILE, "utf-8")));
+    }
   } catch (err) {
     res.status(500).json({ error: "Failed to read menu" });
   }
 });
 
-app.post("/api/menu", (req, res) => {
+app.post("/api/menu", async (req, res) => {
   try {
+    if (db) {
+      const d = doc(db, "cms", "menu");
+      await setDoc(d, { items: req.body });
+    }
     fs.writeFileSync(MENU_FILE, JSON.stringify(req.body, null, 2), "utf-8");
     res.json({ success: true });
   } catch (err) {
@@ -55,20 +72,35 @@ app.post("/api/menu", (req, res) => {
   }
 });
 
-app.get("/api/content", (req, res) => {
+app.get("/api/content", async (req, res) => {
   try {
-    if (!fs.existsSync(CONTENT_FILE)) {
-      return res.json({});
+    if (db) {
+      const d = doc(db, "cms", "content");
+      const snap = await getDoc(d);
+      if (!snap.exists()) {
+        let localContent = {};
+        if (fs.existsSync(CONTENT_FILE)) {
+           localContent = JSON.parse(fs.readFileSync(CONTENT_FILE, "utf8"));
+           await setDoc(d, localContent);
+        }
+        return res.json(localContent);
+      }
+      return res.json(snap.data());
+    } else {
+      if (!fs.existsSync(CONTENT_FILE)) return res.json({});
+      res.json(JSON.parse(fs.readFileSync(CONTENT_FILE, "utf-8")));
     }
-    const data = JSON.parse(fs.readFileSync(CONTENT_FILE, "utf-8"));
-    res.json(data);
   } catch (err) {
-    res.status(500).json({ error: "Failed to read content" });
+    console.error(err); res.status(500).json({ error: "Failed to read content" });
   }
 });
 
-app.post("/api/content", (req, res) => {
+app.post("/api/content", async (req, res) => {
   try {
+    if (db) {
+      const d = doc(db, "cms", "content");
+      await setDoc(d, req.body);
+    }
     fs.writeFileSync(CONTENT_FILE, JSON.stringify(req.body, null, 2), "utf-8");
     res.json({ success: true });
   } catch (err) {
@@ -76,28 +108,85 @@ app.post("/api/content", (req, res) => {
   }
 });
 
-app.post("/api/upload-image", upload.single("image"), (req, res) => {
+app.post("/api/upload-image", upload.single("image"), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+  
   const key = req.body.key;
-  const newPath = "assets/images/" + req.file.filename;
+  const uniqueId = Date.now() + "-" + Math.round(Math.random() * 1e9);
   
   try {
-    let content = {};
-    if (fs.existsSync(CONTENT_FILE)) {
-      content = JSON.parse(fs.readFileSync(CONTENT_FILE, "utf-8"));
-    }
-    if(key) { content[key] = newPath; }
-    if(key) { fs.writeFileSync(CONTENT_FILE, JSON.stringify(content, null, 2), "utf-8"); }
+    let newPath = "";
     
-    const distDir = path.join(process.cwd(), "dist", "assets", "images");
-    if (fs.existsSync(distDir)) {
-      fs.mkdirSync(distDir, { recursive: true });
-      fs.copyFileSync(req.file.path, path.join(distDir, req.file.filename));
+    if (db) {
+      newPath = "/api/images/" + uniqueId;
+      const base64Data = req.file.buffer.toString("base64");
+      const mimeType = req.file.mimetype;
+      
+      const imgDoc = doc(db, "images", uniqueId);
+      await setDoc(imgDoc, {
+          data: base64Data,
+          mimeType: mimeType
+      });
+      
+      if (key) {
+          const contentDoc = doc(db, "cms", "content");
+          const snap = await getDoc(contentDoc);
+          let content = snap.exists() ? snap.data() : {};
+          content[key] = newPath;
+          await setDoc(contentDoc, content);
+          fs.writeFileSync(CONTENT_FILE, JSON.stringify(content, null, 2), "utf-8");
+      }
+    } else {
+      const ext = path.extname(req.file.originalname) || ".jpg";
+      const filename = "img_" + uniqueId + ext;
+      const dir = path.join(process.cwd(), "assets", "images");
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(path.join(dir, filename), req.file.buffer);
+      newPath = "assets/images/" + filename;
+      
+      if (key) {
+        let content: any = {};
+        if (fs.existsSync(CONTENT_FILE)) {
+          content = JSON.parse(fs.readFileSync(CONTENT_FILE, "utf-8"));
+        }
+        content[key] = newPath;
+        fs.writeFileSync(CONTENT_FILE, JSON.stringify(content, null, 2), "utf-8");
+      }
+      
+      const distDir = path.join(process.cwd(), "dist", "assets", "images");
+      if (fs.existsSync(distDir)) {
+        fs.mkdirSync(distDir, { recursive: true });
+        fs.writeFileSync(path.join(distDir, filename), req.file.buffer);
+      }
     }
     
     res.json({ success: true, path: newPath });
   } catch (err) {
-    res.status(500).json({ error: "Failed to save image metadata" });
+    console.error(err);
+    res.status(500).json({ error: "Failed to save image" });
+  }
+});
+
+// Serve images directly from Firestore
+app.get("/api/images/:id", async (req, res) => {
+  try {
+    if (!db) return res.status(404).send("Database not configured");
+    const d = doc(db, "images", req.params.id);
+    const snap = await getDoc(d);
+    if (!snap.exists()) return res.status(404).send("Not found");
+    
+    const dataObj = snap.data();
+    if (!dataObj) return res.status(404).send("Not found");
+    
+    const imgBuffer = Buffer.from(dataObj.data, 'base64');
+    
+    res.writeHead(200, {
+        'Content-Type': dataObj.mimeType,
+        'Content-Length': imgBuffer.length
+    });
+    res.end(imgBuffer);
+  } catch(err) {
+    res.status(500).send("Error fetching image");
   }
 });
 
