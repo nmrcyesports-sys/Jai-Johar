@@ -1,0 +1,168 @@
+/* ============================================
+   JAI JOHAR — Admin Dashboard Styles
+   ============================================ */
+
+.admin-body { display: flex; min-height: 100vh; background: var(--bg); overflow: hidden; }
+
+/* Sidebar */
+.admin-sidebar { 
+  width: 280px; 
+  background: var(--deep-2); 
+  color: #fff; 
+  display: flex; 
+  flex-direction: column; 
+  flex-shrink: 0; 
+  padding: 32px 0; 
+}
+.admin-brand { 
+  padding: 0 32px 32px; 
+  border-bottom: 1px solid rgba(255,255,255,0.1); 
+  margin-bottom: 24px; 
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.admin-brand svg { width: 36px; height: 36px; }
+.admin-brand .logo__text { color: #fff; font-size: 20px; }
+.admin-brand .logo__text small { color: rgba(255,255,255,0.6); font-size: 8px; margin-top: 2px;}
+
+.admin-nav { display: flex; flex-direction: column; gap: 8px; padding: 0 16px; flex: 1; }
+.admin-nav-item { 
+  padding: 14px 18px; 
+  border-radius: var(--radius-sm); 
+  color: rgba(255,255,255,0.7); 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  cursor: pointer; 
+  transition: all var(--transition); 
+  font-family: var(--font-mono); 
+  font-size: 11px; 
+  text-transform: uppercase; 
+  letter-spacing: 1.5px; 
+  font-weight: 600; 
+}
+.admin-nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+.admin-nav-item.active { background: var(--terracotta); color: #fff; }
+.admin-nav-badge { 
+  background: rgba(0,0,0,0.4); 
+  padding: 4px 8px; 
+  border-radius: 12px; 
+  font-size: 10px; 
+}
+.admin-nav-item.active .admin-nav-badge { background: rgba(0,0,0,0.2); }
+
+.admin-logout { padding: 0 16px; margin-top: auto; }
+.admin-logout a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255,255,255,0.6);
+  font-family: var(--font-mono); 
+  font-size: 11px; 
+  text-transform: uppercase; 
+  letter-spacing: 1.5px; 
+  padding: 14px 18px; 
+  transition: all var(--transition);
+}
+.admin-logout a:hover { color: var(--terracotta); }
+
+/* Main Content */
+.admin-main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: var(--bg); }
+.admin-header { 
+  padding: 28px 48px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  border-bottom: 1px solid var(--border); 
+  background: var(--surface); 
+  position: sticky; 
+  top: 0; 
+  z-index: 10; 
+}
+.admin-header h1 { font-family: var(--font-display); font-size: 28px; font-weight: 600; color: var(--text-bright); }
+.admin-header-date { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); }
+
+.admin-content { padding: 48px; flex: 1; display: flex; flex-direction: column; }
+.admin-view { display: none; animation: fadeUp 0.4s var(--ease) forwards; flex: 1; }
+.admin-view.active { display: block; }
+
+.admin-empty-state {
+  text-align: center;
+  padding: 64px 20px;
+  background: var(--surface);
+  border: 1px dashed var(--border-bright);
+  border-radius: var(--radius-lg);
+  color: var(--text-dim);
+}
+.admin-empty-state svg { width: 48px; height: 48px; margin: 0 auto 16px; stroke: var(--terracotta-light); fill: none; opacity: 0.5; }
+.admin-empty-state p { font-size: 16px; }
+
+/* Tables */
+.admin-card { 
+  background: var(--surface); 
+  border: 1px solid var(--border); 
+  border-radius: var(--radius-lg); 
+  overflow: hidden; 
+  box-shadow: var(--shadow-sm); 
+}
+.admin-table { width: 100%; border-collapse: collapse; text-align: left; }
+.admin-table th { 
+  font-family: var(--font-mono); 
+  font-size: 10px; 
+  text-transform: uppercase; 
+  letter-spacing: 1.5px; 
+  color: var(--text-dim); 
+  padding: 20px 24px; 
+  border-bottom: 1px solid var(--border); 
+  background: var(--surface-2); 
+  font-weight: 600; 
+}
+.admin-table td { 
+  padding: 20px 24px; 
+  border-bottom: 1px solid var(--border-bright); 
+  font-size: 14px; 
+  color: var(--text); 
+  vertical-align: top; 
+}
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover { background: rgba(92,64,36,0.02); }
+
+.admin-cell-title { font-weight: 600; color: var(--text-bright); display: block; margin-bottom: 4px; }
+.admin-cell-sub { font-size: 13px; color: var(--text-dim); display: block; }
+
+/* Badges */
+.admin-badge { 
+  display: inline-flex; 
+  align-items: center; 
+  padding: 4px 10px; 
+  border-radius: 12px; 
+  font-family: var(--font-mono); 
+  font-size: 9px; 
+  font-weight: 600; 
+  text-transform: uppercase; 
+  letter-spacing: 1px; 
+}
+.admin-badge.pending { background: var(--gold-dim); color: var(--gold-bright); }
+.admin-badge.confirmed { background: rgba(93,125,78,0.15); color: var(--sage); }
+.admin-badge.unread { background: var(--terracotta-dim); color: var(--terracotta); }
+.admin-badge.read { background: rgba(0,0,0,0.05); color: var(--text-dim); }
+
+/* Actions */
+.admin-actions { display: flex; gap: 8px; }
+.admin-btn-icon { 
+  width: 32px; 
+  height: 32px; 
+  border-radius: var(--radius-sm); 
+  border: 1px solid var(--border); 
+  background: var(--surface); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  cursor: pointer; 
+  transition: all var(--transition); 
+  color: var(--text-dim); 
+}
+.admin-btn-icon:hover { border-color: var(--terracotta); color: var(--terracotta); background: var(--terracotta-dim); }
+.admin-btn-icon.success:hover { border-color: var(--sage); color: var(--sage); background: rgba(93,125,78,0.1); }
+.admin-btn-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }

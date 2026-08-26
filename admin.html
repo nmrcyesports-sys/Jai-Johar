@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — Jai Johar Family Restaurant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Azeret+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+  <aside class="admin-sidebar">
+    <div class="admin-brand">
+      <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
+        <circle cx="22" cy="22" r="21" fill="#b8451f"/>
+        <path d="M22 8 C14 14 11 22 14 32 C18 36 26 36 30 32 C33 22 30 14 22 8 Z" fill="none" stroke="#faf5ee" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M22 16 L20 22 L17 26 M20 22 L25 24 L28 28 M22 16 L24 20 L26 26" stroke="#faf5ee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="22" cy="14" r="2" fill="#faf5ee"/>
+      </svg>
+      <div>
+        <span class="logo__text" style="display:block">Jai Johar<small>Admin Portal</small></span>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <div class="admin-nav-item active" data-target="view-reservations">
+        Reservations
+        <span class="admin-nav-badge" id="badge-reservations">0</span>
+      </div>
+      <div class="admin-nav-item" data-target="view-messages">
+        Messages
+        <span class="admin-nav-badge" id="badge-messages">0</span>
+      </div>
+      <div class="admin-nav-item" data-target="view-subscribers">
+        Newsletter Subs
+        <span class="admin-nav-badge" id="badge-subscribers">0</span>
+      </div>
+      <div class="admin-nav-item" data-target="view-cms">
+        Text Content
+      </div>
+      <div class="admin-nav-item" data-target="view-images">
+        Image Manager
+      </div>
+      <div class="admin-nav-item" data-target="view-menu">
+        Menu Items
+      </div>
+    </nav>
+
+    <div class="admin-logout">
+      <a href="index.html">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Back to Website
+      </a>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-header">
+      <h1 id="admin-page-title">Reservations</h1>
+      <div class="admin-header-date" id="admin-current-date"></div>
+    </header>
+
+    <div class="admin-content">
+      
+      <!-- RESERVATIONS VIEW -->
+      <div class="admin-view active" id="view-reservations">
+        <div class="admin-card">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Guest</th>
+                <th>Date & Time</th>
+                <th>Details</th>
+                <th>Status</th>
+                <th style="text-align:right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-reservations">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MESSAGES VIEW -->
+      <div class="admin-view" id="view-messages">
+        <div class="admin-card">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Sender</th>
+                <th>Subject & Message</th>
+                <th>Date Received</th>
+                <th>Status</th>
+                <th style="text-align:right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-messages">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SUBSCRIBERS VIEW -->
+      <div class="admin-view" id="view-subscribers">
+        <div class="admin-card">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Email Address</th>
+                <th>Date Subscribed</th>
+                <th style="text-align:right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-subscribers">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      
+      <!-- MENU VIEW -->
+      <div class="admin-view" id="view-menu">
+        <div class="admin-card" style="max-width: 1000px">
+          <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h2>Manage Menu</h2>
+            <button class="btn btn--primary btn--sm" id="btn-add-menu">Add New Item</button>
+          </div>
+          <div class="table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="table-menu">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Menu Form Modal (Hidden by default) -->
+        <div class="admin-card" id="menu-form-container" style="display: none; max-width: 600px; margin-top: 24px;">
+          <h3 id="menu-form-title">Add Menu Item</h3>
+          <form id="menu-form" style="display:flex; flex-direction:column; gap:16px; margin-top: 16px;">
+            <input type="hidden" id="menu-id" name="id">
+            
+            <div style="display:flex; gap: 16px;">
+              <div style="flex:1;">
+                <label style="font-size:12px;font-weight:600;color:var(--text-dim);display:block;margin-bottom:4px;">Item Name</label>
+                <input type="text" id="menu-name" name="name" required style="width:100%; padding:10px; border:1px solid var(--border-bright); border-radius:4px;">
+              </div>
+              <div style="flex:1;">
+                <label style="font-size:12px;font-weight:600;color:var(--text-dim);display:block;margin-bottom:4px;">Price</label>
+                <input type="text" id="menu-price" name="price" required style="width:100%; padding:10px; border:1px solid var(--border-bright); border-radius:4px;">
+              </div>
+            </div>
+            
+            <div>
+              <label style="font-size:12px;font-weight:600;color:var(--text-dim);display:block;margin-bottom:4px;">Category</label>
+              <input type="text" id="menu-category" name="category" required style="width:100%; padding:10px; border:1px solid var(--border-bright); border-radius:4px;" list="cat-list">
+              <datalist id="cat-list">
+                <option value="Starters">
+                <option value="Thalis">
+                <option value="Mains">
+                <option value="Breads">
+                <option value="Desserts">
+                <option value="Beverages">
+              </datalist>
+            </div>
+            
+            <div>
+              <label style="font-size:12px;font-weight:600;color:var(--text-dim);display:block;margin-bottom:4px;">Description</label>
+              <textarea id="menu-desc" name="description" rows="3" style="width:100%; padding:10px; border:1px solid var(--border-bright); border-radius:4px; resize:vertical;"></textarea>
+            </div>
+            
+            <div>
+              <label style="font-size:12px;font-weight:600;color:var(--text-dim);display:block;margin-bottom:4px;">Image</label>
+              <div style="display:flex; gap:16px; align-items:flex-end;">
+                <img id="menu-img-preview" src="" style="width:100px; height:100px; object-fit:cover; border-radius:8px; display:none; border:1px solid var(--border);">
+                <input type="hidden" id="menu-image" name="image">
+                <input type="file" id="menu-file-upload" accept="image/*" style="font-size: 14px;">
+              </div>
+            </div>
+            
+            <div style="display:flex; gap: 12px; margin-top: 8px;">
+              <button type="submit" class="btn btn--primary">Save Item</button>
+              <button type="button" class="btn btn--secondary" id="btn-cancel-menu" style="background:var(--surface); border:1px solid var(--border-bright); color:var(--text);">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      
+      <!-- IMAGES VIEW -->
+      <div class="admin-view" id="view-images">
+        <div class="admin-card" style="max-width: 1000px">
+          <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h2>Image Manager</h2>
+            <p style="color: var(--text-dim); margin:0;">Upload and change images across your website.</p>
+          </div>
+          <form id="images-form">
+            <div id="images-fields-container" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:24px;">
+              <!-- Fields injected by JS -->
+            </div>
+            <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-bright);">
+              <button type="submit" class="btn btn--primary">Save All Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- CMS VIEW -->
+      <div class="admin-view" id="view-cms">
+        <div class="admin-card" style="max-width: 800px">
+          <h2>Edit Website Content</h2>
+          <p style="color: var(--color-gray-dark); margin-bottom: 24px; font-size: 14px;">Update the text across your website here. Changes are saved automatically when you click "Save Changes".</p>
+          <form id="cms-form" style="display:flex; flex-direction:column; gap:16px;">
+            <div id="cms-fields-container" style="display:flex; flex-direction:column; gap:16px;">
+              <!-- Fields injected by JS -->
+            </div>
+            <button type="submit" class="btn btn--primary" style="align-self: flex-start; margin-top: 16px;">Save Changes</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

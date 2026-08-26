@@ -1,0 +1,8 @@
+{
+  "name": "Jai Johar Family Restaurant",
+  "description": "A responsive single-page restaurant website featuring traditional Jharkhand cuisine.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
