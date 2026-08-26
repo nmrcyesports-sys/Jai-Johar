@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard — Jai Johar Family Restaurant</title>
+    <title>Admin Dashboard | Jai Johar</title>
+    <meta name="description" content="Admin dashboard for Jai Johar Family Restaurant.">
+    <meta name="keywords" content="">
+    <meta name="author" content="Jai Johar Family Restaurant">
+    <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Azeret+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -11,7 +15,6 @@
 <link rel="stylesheet" href="css/admin.css">
 </head>
 <body class="admin-body">
-
   <aside class="admin-sidebar">
     <div class="admin-brand">
       <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
@@ -24,7 +27,6 @@
         <span class="logo__text" style="display:block">Jai Johar<small>Admin Portal</small></span>
       </div>
     </div>
-
     <nav class="admin-nav">
       <div class="admin-nav-item active" data-target="view-reservations">
         Reservations
@@ -48,7 +50,6 @@
         Menu Items
       </div>
     </nav>
-
     <div class="admin-logout">
       <a href="index.html">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
@@ -56,15 +57,12 @@
       </a>
     </div>
   </aside>
-
   <main class="admin-main">
     <header class="admin-header">
       <h1 id="admin-page-title">Reservations</h1>
       <div class="admin-header-date" id="admin-current-date"></div>
     </header>
-
     <div class="admin-content">
-      
       <!-- RESERVATIONS VIEW -->
       <div class="admin-view active" id="view-reservations">
         <div class="admin-card">
@@ -84,7 +82,6 @@
           </table>
         </div>
       </div>
-
       <!-- MESSAGES VIEW -->
       <div class="admin-view" id="view-messages">
         <div class="admin-card">
@@ -104,7 +101,6 @@
           </table>
         </div>
       </div>
-
       <!-- SUBSCRIBERS VIEW -->
       <div class="admin-view" id="view-subscribers">
         <div class="admin-card">
@@ -122,8 +118,6 @@
           </table>
         </div>
       </div>
-
-      
       <!-- MENU VIEW -->
       <div class="admin-view" id="view-menu">
         <div class="admin-card" style="max-width: 1000px">
@@ -148,13 +142,11 @@
             </table>
           </div>
         </div>
-        
         <!-- Menu Form Modal (Hidden by default) -->
         <div class="admin-card" id="menu-form-container" style="display: none; max-width: 600px; margin-top: 24px;">
           <h3 id="menu-form-title">Add Menu Item</h3>
           <form id="menu-form" style="display:flex; flex-direction:column; gap:16px; margin-top: 16px;">
             <input type="hidden" id="menu-id" name="id">
-            
             <div style="display:flex; gap: 16px;">
               <div style="flex:1;">
                 <label style="font-size:12px;font-weight:600;color:var(--text-dim);display:block;margin-bottom:4px;">Item Name</label>
@@ -165,7 +157,6 @@
                 <input type="text" id="menu-price" name="price" required style="width:100%; padding:10px; border:1px solid var(--border-bright); border-radius:4px;">
               </div>
             </div>
-            
             <div>
               <label style="font-size:12px;font-weight:600;color:var(--text-dim);display:block;margin-bottom:4px;">Category</label>
               <input type="text" id="menu-category" name="category" required style="width:100%; padding:10px; border:1px solid var(--border-bright); border-radius:4px;" list="cat-list">
@@ -178,12 +169,10 @@
                 <option value="Beverages">
               </datalist>
             </div>
-            
             <div>
               <label style="font-size:12px;font-weight:600;color:var(--text-dim);display:block;margin-bottom:4px;">Description</label>
               <textarea id="menu-desc" name="description" rows="3" style="width:100%; padding:10px; border:1px solid var(--border-bright); border-radius:4px; resize:vertical;"></textarea>
             </div>
-            
             <div>
               <label style="font-size:12px;font-weight:600;color:var(--text-dim);display:block;margin-bottom:4px;">Image</label>
               <div style="display:flex; gap:16px; align-items:flex-end;">
@@ -192,7 +181,6 @@
                 <input type="file" id="menu-file-upload" accept="image/*" style="font-size: 14px;">
               </div>
             </div>
-            
             <div style="display:flex; gap: 12px; margin-top: 8px;">
               <button type="submit" class="btn btn--primary">Save Item</button>
               <button type="button" class="btn btn--secondary" id="btn-cancel-menu" style="background:var(--surface); border:1px solid var(--border-bright); color:var(--text);">Cancel</button>
@@ -200,8 +188,6 @@
           </form>
         </div>
       </div>
-
-      
       <!-- IMAGES VIEW -->
       <div class="admin-view" id="view-images">
         <div class="admin-card" style="max-width: 1000px">
@@ -219,7 +205,6 @@
           </form>
         </div>
       </div>
-
       <!-- CMS VIEW -->
       <div class="admin-view" id="view-cms">
         <div class="admin-card" style="max-width: 800px">
@@ -233,10 +218,8 @@
           </form>
         </div>
       </div>
-
     </div>
   </main>
-
 <script src="js/admin.js"></script>
 </body>
 </html>

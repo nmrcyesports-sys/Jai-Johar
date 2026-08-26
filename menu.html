@@ -3,14 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jai Johar Family Restaurant — Menu</title>
+    <title>Our Menu | Jai Johar Family Restaurant</title>
+    <meta name="description" content="Browse the Jai Johar Family Restaurant menu. Featuring authentic Jharkhand curries, vegetarian specialties, and traditional sweet delicacies.">
+    <meta name="keywords" content="Jharkhand menu, tribal food menu, Dhanbad restaurant menu, vegetarian thali, non-veg thali">
+    <meta name="author" content="Jai Johar Family Restaurant">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Our Menu | Jai Johar Family Restaurant">
+    <meta property="og:description" content="Browse the Jai Johar Family Restaurant menu. Featuring authentic Jharkhand curries, vegetarian specialties, and traditional sweet delicacies.">
+    <meta property="og:image" content="assets/images/img_f37bcfed61.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Jai Johar Family Restaurant">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Our Menu | Jai Johar Family Restaurant">
+    <meta name="twitter:description" content="Browse the Jai Johar Family Restaurant menu. Featuring authentic Jharkhand curries, vegetarian specialties, and traditional sweet delicacies.">
+    <meta name="twitter:image" content="assets/images/img_f37bcfed61.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Azeret+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
 <header class="site-header">
   <nav class="nav">
     <a href="index.html" class="logo" aria-label="Jai Johar Family Restaurant">
@@ -39,7 +51,6 @@
     </div>
   </nav>
 </header>
-
 <section class="page-hero">
   <img class="page-hero__bg" data-cms-img="menu.image44" src="assets/images/img_f37bcfed61.jpg" alt="Authentic Thali">
   <div class="page-hero__overlay"></div>
@@ -49,8 +60,6 @@
     <div class="breadcrumb"><a href="index.html">Home</a><span>/</span>Menu</div>
   </div>
 </section>
-
-
 <section class="section menu-page" style="padding-top: 40px;">
   <div class="container" id="menu-container">
     <div style="text-align: center; padding: 40px;">
@@ -66,16 +75,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const res = await fetch("/api/menu");
     if (!res.ok) throw new Error("Failed to load menu");
     const menuItems = await res.json();
-    
     // Group by category
     const categories = {};
     menuItems.forEach(item => {
       if (!categories[item.category]) categories[item.category] = [];
       categories[item.category].push(item);
     });
-    
     container.innerHTML = ""; // clear loading
-    
     for (const [cat, items] of Object.entries(categories)) {
       const catHeader = document.createElement("h2");
       catHeader.textContent = cat;
@@ -84,17 +90,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       catHeader.style.borderBottom = "1px solid var(--border-bright)";
       catHeader.style.paddingBottom = "16px";
       catHeader.style.color = "var(--text)";
-      
       const grid = document.createElement("div");
       grid.className = "bento-grid";
-      
       items.forEach(item => {
         const card = document.createElement("div");
         card.className = "bento-card bento-card--light";
         card.style.display = "flex";
         card.style.flexDirection = "column";
         card.style.gap = "16px";
-        
         card.innerHTML = `
           ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">` : ""}
           <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
@@ -105,11 +108,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         `;
         grid.appendChild(card);
       });
-      
       container.appendChild(catHeader);
       container.appendChild(grid);
     }
-    
     if(menuItems.length === 0) {
       container.innerHTML = `
         <div style="text-align: center; padding: 60px;">
@@ -123,8 +124,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 </script>
-
-
 <footer class="footer" id="contact">
   <div class="footer-grid">
     <div class="footer-col footer-brand">
