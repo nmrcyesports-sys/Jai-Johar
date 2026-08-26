@@ -8,7 +8,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, getDoc, setDoc } from 'firebase/firestore';
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // Initialize Firebase Client SDK
@@ -202,7 +202,12 @@ async function startServer() {
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
       const reqPath = req.path === '/' ? '/index.html' : req.path;
-      const file = path.join(distPath, reqPath);
+      let file = path.join(distPath, reqPath);
+      
+      if (!fs.existsSync(file) && fs.existsSync(file + ".html")) {
+        file = file + ".html";
+      }
+      
       if (fs.existsSync(file)) {
         res.sendFile(file);
       } else {
